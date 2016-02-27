@@ -4,21 +4,21 @@ package com.gunsnrocket.int20h.models;
  * Created by Kryvonis on 2/27/16.
  */
 public class Category {
-    Integer id;
+    int id;
     String name;
-    Integer points;
+    int points;
 
-    public Category(Integer id, String name, Integer points) {
+    public Category(int id, String name, int points) {
         this.id = id;
         this.name = name;
         this.points = points;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -30,11 +30,11 @@ public class Category {
         this.name = name;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(int points) {
         this.points = points;
     }
 }

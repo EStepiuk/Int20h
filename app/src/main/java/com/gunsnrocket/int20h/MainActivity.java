@@ -26,6 +26,9 @@ import com.gunsnrocket.int20h.models.Category;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
+    public static final String CATEGORY_ID = "category_id";
+    public static final String CATEGORY_NAME = "category_name";
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a

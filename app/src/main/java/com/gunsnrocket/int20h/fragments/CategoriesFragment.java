@@ -57,7 +57,6 @@ public class CategoriesFragment extends Fragment {
             @Override
             protected void onPostExecute(Void result) {
                 categoryAdapter.notifyDataSetChanged();
-                Log.d("d", "privet");
             }
         }).execute();
 
