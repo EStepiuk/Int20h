@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.gunsnrocket.int20h.fragments.*;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -127,13 +128,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0: return new CategoriesFragment();
+                default: return PlaceholderFragment.newInstance(position + 1);
+            }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
