@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 
 import com.gunsnrocket.int20h.R;
 
-import java.util.zip.Inflater;
-
 /**
  * Created by dnt on 2/27/16.
  */
@@ -23,5 +21,7 @@ public class CategoriesFragment extends Fragment {
             View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
             return rootView;
     }
+
+
 
 }
