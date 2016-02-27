@@ -148,8 +148,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
-                case 0: return new CategoriesFragment();
-                default: return PlaceholderFragment.newInstance(position + 1);
+                case 0:
+                    return new CategoriesFragment();
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
             }
         }
 

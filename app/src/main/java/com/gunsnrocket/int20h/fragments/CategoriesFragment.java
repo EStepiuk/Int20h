@@ -44,7 +44,7 @@ public class CategoriesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(categoryAdapter);
 
-        (new AsyncTask<Void, Void, Void>(){
+        (new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
@@ -63,7 +63,6 @@ public class CategoriesFragment extends Fragment {
 
         return rootView;
     }
-
 
 
 }
