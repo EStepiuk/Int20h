@@ -53,16 +53,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 
 
+//
+//        (new Thread(){
+//            @Override
+//            public void run() {
+//                Group group = new Group(1422,"ven-fan",0,13);
+//                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
+//                kazpromDBHelper.connect();
+//                kazpromDBHelper.getProductReclam(group,new int[]{3442,3440,3444});
+//            }
+//        }).start();
 
-        (new Thread(){
-            @Override
-            public void run() {
-                Group group = new Group(1422,"ven-fan",0,13);
-                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
-                kazpromDBHelper.connect();
-                kazpromDBHelper.getProductReclam(group,new int[]{3442,3440,3444});
-            }
-        }).start();
+
 
 
         // Set up the action bar.

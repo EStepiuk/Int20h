@@ -4,17 +4,19 @@ package com.gunsnrocket.int20h.models;
  * Created by Kryvonis on 2/27/16.
  */
 public class Product {
-    Integer id;
+    int id;
     String name;
-    Integer id_Group;
+    int id_Group;
+    String desc;
 
-    public Product(Integer id, String name, Integer id_Group) {
+    public Product(int id, String name, int id_Group,String desc) {
         this.id = id;
         this.name = name;
         this.id_Group = id_Group;
+        this.desc = desc;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -30,7 +32,7 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getId_Group() {
+    public int getId_Group() {
         return id_Group;
     }
 

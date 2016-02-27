@@ -129,7 +129,9 @@ public class KazpromDBHelper {
             rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Log.d("TAG", rs.getString("caption"));
-                Product category = new Product(rs.getInt("id"), rs.getString("caption"), idGroup);
+                String desc = rs.getString("html_long_description");
+                Product category = new Product(rs.getInt("id"), rs.getString("caption"), idGroup,
+                        desc.substring(3,desc.length()-3));
                 resultList.add(category);
             }
             rs.close();
@@ -139,7 +141,13 @@ public class KazpromDBHelper {
         }
     }
 
-    public Product getProductReclam(Group group,int[] ids) {
+    /**
+     *
+     * @param group
+     * @param ids
+     * @return
+     */
+    public Product getProductReclam(Group group,ArrayList<Integer> ids) {
 
         String sql = "Select * FROM product\n" +
                 "WHERE category_id = ? and rank  = (Select max(rank) FROM product WHERE " +
@@ -147,24 +155,20 @@ public class KazpromDBHelper {
         ResultSet rs;
         Product product = null;
         PreparedStatement statement;
-        Statement stm;
         try {
-            Log.d("TTAG", "PIZDA1");
-            statement = connection.prepareStatement(sql);
-//            statement = (PreparedStatement) connection.createStatement();
-            statement.setInt(1, group.getId());
-            statement.setInt(2, group.getId());
-            Log.d("TTAG", "PIZDA2");
-            for (int i = 0; i < ids.length; i++) {
-                sql += " and id <> " + ids[i];
+            for (int i = 0; i < ids.size(); i++) {
+                sql += " and id <> " + ids.get(i);
             }
             sql += ";";
-            Log.d("TTAG", "PIZDA3" + sql);
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, group.getId());
+            statement.setInt(2, group.getId());
             rs = statement.executeQuery();
-            Log.d("TTAG", "PIZDA" + rs.toString());
             while (rs.next()) {
                 Log.d("TTAG", rs.getString("name"));
-                product = new Product(rs.getInt("id"), rs.getString("name"), group.getId());
+                String desc = rs.getString("html_long_description");
+                product = new Product(rs.getInt("id"), rs.getString("name"), group.getId(),
+                        desc.substring(3,desc.length()-3));
             }
             rs.close();
             statement.close();
