@@ -24,6 +24,12 @@ public class KazpromDBHelper {
     private Connection connection;
     private Statement stmt;
 
+    private KazpromDBHelper(){}
+    private static KazpromDBHelper instance = new KazpromDBHelper();
+
+    static KazpromDBHelper getInstance(){return instance;}
+
+
     public void connect(){
         try {
             Class.forName(DRIVER);
@@ -69,5 +75,7 @@ public class KazpromDBHelper {
             e.printStackTrace();
         }
     }
+
+
 }
 
