@@ -26,7 +26,7 @@ public class CategoriesFragment extends Fragment {
     private RecyclerView recyclerView;
     private CategoryAdapter categoryAdapter;
     private StaggeredGridLayoutManager layoutManager;
-    private KazpromDBHelper kazpromDBHelper = new KazpromDBHelper();
+    private KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
 
     public CategoriesFragment() {
     }

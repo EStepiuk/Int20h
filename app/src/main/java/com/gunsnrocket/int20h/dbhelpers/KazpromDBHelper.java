@@ -27,7 +27,7 @@ public class KazpromDBHelper {
     private KazpromDBHelper(){}
     private static KazpromDBHelper instance = new KazpromDBHelper();
 
-    static KazpromDBHelper getInstance(){return instance;}
+    public static KazpromDBHelper getInstance(){return instance;}
 
 
     public void connect(){
