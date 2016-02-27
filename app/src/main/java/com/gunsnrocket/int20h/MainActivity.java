@@ -1,5 +1,6 @@
 package com.gunsnrocket.int20h;
 
+import java.util.List;
 import java.util.Locale;
 
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.fragments.*;
+import com.gunsnrocket.int20h.models.Category;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -78,18 +80,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-
-
-        (new Thread(){
-            @Override
-            public void run() {
-                KazpromDBHelper kazpromDBHelper = new KazpromDBHelper();
-                kazpromDBHelper.connect();
-                kazpromDBHelper.getCategoryList();
-            }
-        }).start();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        //kazpromDBHelper.close();
+
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -44,9 +44,8 @@ public class KazpromDBHelper {
         }
     }
 
-    public List<Category> getCategoryList(){
+    public void getCategoryList(ArrayList<Category> resultList){
 
-        List<Category> resultList = new ArrayList<>();
         String sql = "Select * from product_category\n" +
                 "where main_parent_category_id = 0\n" +
                 "GROUP BY caption,id;";
@@ -69,8 +68,6 @@ public class KazpromDBHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return resultList;
     }
 }
 

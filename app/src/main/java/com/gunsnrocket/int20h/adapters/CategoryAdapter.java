@@ -36,21 +36,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        holder.name.setText(list.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageView;
-        private TextView name;
+        ImageView imageView;
+        TextView name;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            name = (TextView) itemView.findViewById(R.id.category_name);
         }
     }
 
