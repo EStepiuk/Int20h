@@ -127,6 +127,7 @@ public class KazpromDBHelper {
             statement.setInt(1, idCategory);
             statement.setInt(2, idGroup);
             rs = statement.executeQuery(sql);
+
             while (rs.next()) {
                 Log.d("TAG", rs.getString("caption"));
                 String desc = rs.getString("html_long_description");
