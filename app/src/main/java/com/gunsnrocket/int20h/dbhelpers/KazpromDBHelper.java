@@ -39,8 +39,10 @@ public class KazpromDBHelper {
 
     public void connect() {
         try {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(DB_URL, USER_NAME, USER_PASWORD);
+            if(connection == null) {
+                Class.forName(DRIVER);
+                connection = DriverManager.getConnection(DB_URL, USER_NAME, USER_PASWORD);
+            }
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -63,11 +65,11 @@ public class KazpromDBHelper {
                 "where main_parent_category_id = 0\n" +
                 "GROUP BY caption,id;";
         ResultSet rs;
-        Statement stmt;
+        Statement statement;
         try {
-            stmt = connection.createStatement();
+            statement = connection.createStatement();
             Log.d("Test", "BEFORE QUERY");
-            rs = stmt.executeQuery(sql);
+            rs = statement.executeQuery(sql);
             Log.d("Test", "After QUERY");
             while (rs.next()) {
                 Log.d("TAG", rs.getString("caption"));
@@ -79,6 +81,8 @@ public class KazpromDBHelper {
                 Category category = new Category(rs.getInt("id"), rs.getString("caption"), 0);
                 resultList.add(category);
             }
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,9 +95,10 @@ public class KazpromDBHelper {
         ResultSet rs;
         PreparedStatement statement;
         try {
+
             statement = connection.prepareStatement(sql);
             statement.setInt(1, idCategory);
-            rs = statement.executeQuery(sql);
+            rs = statement.executeQuery();
             while (rs.next()) {
                 Log.d("TAG", rs.getString("caption"));
                 /**
@@ -104,6 +109,8 @@ public class KazpromDBHelper {
                 Group category = new Group(rs.getInt("id"), rs.getString("caption"), 0, idCategory);
                 resultList.add(category);
             }
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,18 +129,51 @@ public class KazpromDBHelper {
             rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Log.d("TAG", rs.getString("caption"));
-                /**
-                 * MATEMATIKA
-                 *
-                 *
-                 */
                 Product category = new Product(rs.getInt("id"), rs.getString("caption"), idGroup);
                 resultList.add(category);
             }
+            rs.close();
+            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public Product getProductReclam(Group group,int[] ids) {
+
+        String sql = "Select * FROM product\n" +
+                "WHERE category_id = ? and rank  = (Select max(rank) FROM product WHERE " +
+                "category_id = ?)";
+        ResultSet rs;
+        Product product = null;
+        PreparedStatement statement;
+        Statement stm;
+        try {
+            Log.d("TTAG", "PIZDA1");
+            statement = connection.prepareStatement(sql);
+//            statement = (PreparedStatement) connection.createStatement();
+            statement.setInt(1, group.getId());
+            statement.setInt(2, group.getId());
+            Log.d("TTAG", "PIZDA2");
+            for (int i = 0; i < ids.length; i++) {
+                sql += " and id <> " + ids[i];
+            }
+            sql += ";";
+            Log.d("TTAG", "PIZDA3" + sql);
+            rs = statement.executeQuery();
+            Log.d("TTAG", "PIZDA" + rs.toString());
+            while (rs.next()) {
+                Log.d("TTAG", rs.getString("name"));
+                product = new Product(rs.getInt("id"), rs.getString("name"), group.getId());
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return product;
+    }
+
 }
+
 

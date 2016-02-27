@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.fragments.*;
 import com.gunsnrocket.int20h.models.Category;
+import com.gunsnrocket.int20h.models.Group;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -49,6 +50,20 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+        (new Thread(){
+            @Override
+            public void run() {
+                Group group = new Group(1422,"ven-fan",0,13);
+                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
+                kazpromDBHelper.connect();
+                kazpromDBHelper.getProductReclam(group,new int[]{3442,3440,3444});
+            }
+        }).start();
+
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
