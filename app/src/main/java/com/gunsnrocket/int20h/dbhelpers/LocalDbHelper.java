@@ -17,30 +17,28 @@ import java.util.ArrayList;
  */
 public class LocalDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "int20h";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String CREATE_SQL = "CREATE TABLE category (\n" +
             "  id INTEGER NOT NULL,\n" +
             "  name VARCHAR(45),\n" +
             "  points INTEGER,\n" +
-            "  PRIMARY KEY (id));\n" +
-            "\n" +
-            "CREATE TABLE group (\n" +
+            "  PRIMARY KEY (id));";
+
+
+    private final String CREATE_SQL_GROUP = "CREATE TABLE kazgroup (\n" +
             " id INTEGER NOT NULL,\n" +
             "  name VARCHAR(45),\n" +
             "  points INTEGER,\n" +
             "  id_Cat INTEGER,\n" +
-            "  PRIMARY KEY (id));\n" +
-            "\n" +
-            "CREATE TABLE product (\n" +
+            "  PRIMARY KEY (id));";
+    private final String CREATE_SQL_PROD = "CREATE TABLE product (\n" +
             "  id INTEGER NOT NULL,\n" +
             "  name VARCHAR(45),\n" +
             "  points INTEGER,\n" +
             "  id_group INTEGER,\n" +
             "  PRIMARY KEY (id));";
-
-
     private final String CATEGORY_TABLE_NAME = "category";
-    private final String GROUP_TABLE_NAME = "group";
+    private final String GROUP_TABLE_NAME = "kazgroup";
     private final String PRODUCT_TABLE_NAME = "product";
 
     public LocalDbHelper(Context context) {
@@ -50,7 +48,8 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_SQL);
-
+        db.execSQL(CREATE_SQL_GROUP);
+        db.execSQL(CREATE_SQL_PROD);
     }
 
     @Override
@@ -70,7 +69,8 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     }
     public ArrayList<Integer> getIdListProduct(int id){
         ArrayList<Integer> resList = new ArrayList<>();
-        String sql = "select id from " + PRODUCT_TABLE_NAME;
+        String sql = "select id from " + PRODUCT_TABLE_NAME +
+                " where id_group = "+id;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
         if(cursor.moveToFirst()){
@@ -87,6 +87,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("name", category.getName());
         values.put("points", 0);
         db.insert(CATEGORY_TABLE_NAME, null, values);
+        db.close();
     }
     public void addGroup(Group group){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -96,6 +97,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("points", 0);
         values.put("id_Cat", group.getId_Cat());
         db.insert(GROUP_TABLE_NAME, null, values);
+        db.close();
     }
 
     public void addProduct(Product product){

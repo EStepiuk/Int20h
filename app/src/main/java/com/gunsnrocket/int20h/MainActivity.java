@@ -25,6 +25,7 @@ import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.fragments.*;
 import com.gunsnrocket.int20h.models.Category;
 import com.gunsnrocket.int20h.models.Group;
+import com.gunsnrocket.int20h.models.Product;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -55,17 +56,28 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 
         final LocalDbHelper localDbHelper = new LocalDbHelper(this);
-//        (new Thread(){
-//            @Override
-//            public void run() {
-//
-//
-//                Group group = new Group(1422,"ven-fan",0,13);
-//                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
-//                kazpromDBHelper.connect();
-//                kazpromDBHelper.getProductReclam(group,localDbHelper.getIdListProduct(1422));
-//            }
-//        }).start();
+        Category category = new Category(13,"nasos",0);
+        Group group = new Group(1422,"nasos2",0,13);
+        Product product = new Product(3442,"nasos3",1422,"NASOS ZAIBIS");
+
+//        localDbHelper.addCategory(category);
+//        localDbHelper.addGroup(group);
+
+        localDbHelper.addProduct(product);
+
+        (new Thread(){
+            @Override
+            public void run() {
+
+
+                Group group = new Group(1422,"ven-fan",0,13);
+                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
+                kazpromDBHelper.connect();
+
+
+                kazpromDBHelper.getProductReclam(group,localDbHelper.getIdListProduct(1422));
+            }
+        }).start();
 
 
 

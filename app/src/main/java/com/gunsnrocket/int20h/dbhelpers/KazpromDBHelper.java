@@ -39,7 +39,7 @@ public class KazpromDBHelper {
 
     public void connect() {
         try {
-            if(connection == null) {
+            if (connection == null) {
                 Class.forName(DRIVER);
                 connection = DriverManager.getConnection(DB_URL, USER_NAME, USER_PASWORD);
             }
@@ -132,7 +132,7 @@ public class KazpromDBHelper {
                 Log.d("TAG", rs.getString("caption"));
                 String desc = rs.getString("html_long_description");
                 Product category = new Product(rs.getInt("id"), rs.getString("caption"), idGroup,
-                        desc.substring(3,desc.length()-3));
+                        desc.substring(3, desc.length() - 3));
                 resultList.add(category);
             }
             rs.close();
@@ -143,18 +143,20 @@ public class KazpromDBHelper {
     }
 
     /**
-     *
      * @param group
      * @param ids
      * @return
      */
-    public Product getProductReclam(Group group,ArrayList<Integer> ids) {
+    public Product getProductReclam(Group group, ArrayList<Integer> ids) {
 
         String sql = "Select * FROM product\n" +
                 "WHERE category_id = ? and rank  = (Select max(rank) FROM product WHERE " +
                 "category_id = ?)";
         ResultSet rs;
         Product product = null;
+        if (group == null) {
+            return null;
+        }
         PreparedStatement statement;
         try {
             for (int i = 0; i < ids.size(); i++) {
@@ -169,7 +171,7 @@ public class KazpromDBHelper {
                 Log.d("TTAG", rs.getString("name"));
                 String desc = rs.getString("html_long_description");
                 product = new Product(rs.getInt("id"), rs.getString("name"), group.getId(),
-                        desc.substring(3,desc.length()-3));
+                        desc.substring(3, desc.length() - 3));
             }
             rs.close();
             statement.close();

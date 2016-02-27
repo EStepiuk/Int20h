@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import com.gunsnrocket.int20h.adapters.GroupAdapter;
+import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.models.Group;
 
 import java.util.ArrayList;

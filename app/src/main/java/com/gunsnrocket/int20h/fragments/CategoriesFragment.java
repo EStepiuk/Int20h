@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.adapters.CategoryAdapter;
+import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.models.Category;
 
 import java.util.ArrayList;
