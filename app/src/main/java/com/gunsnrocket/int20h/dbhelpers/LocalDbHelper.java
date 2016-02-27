@@ -1,11 +1,13 @@
 package com.gunsnrocket.int20h.dbhelpers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.gunsnrocket.int20h.models.Category;
+import com.gunsnrocket.int20h.models.Group;
 import com.gunsnrocket.int20h.models.Product;
 
 import java.util.ArrayList;
@@ -77,5 +79,53 @@ public class LocalDbHelper extends SQLiteOpenHelper {
             }while (cursor.moveToNext());
         }
         return resList;
+    }
+    public void addCategory(Category category){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", category.getId());
+        values.put("name", category.getName());
+        values.put("points", 0);
+        db.insert(CATEGORY_TABLE_NAME, null, values);
+    }
+    public void addGroup(Group group){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", group.getId());
+        values.put("name", group.getName());
+        values.put("points", 0);
+        values.put("id_Cat", group.getId_Cat());
+        db.insert(GROUP_TABLE_NAME, null, values);
+    }
+
+    public void addProduct(Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id", product.getId());
+        values.put("name", product.getName());
+        values.put("points", 0);
+        values.put("id_group", product.getId_Group());
+        db.insert(PRODUCT_TABLE_NAME, null, values);
+    }
+
+    public boolean isCategoryExist(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from " + CATEGORY_TABLE_NAME + "where id = " + id;
+        Cursor cursor = db.rawQuery(sql, null);
+        return cursor.isFirst();
+    }
+
+    public boolean isGroupExist(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from " + GROUP_TABLE_NAME + "where id = " + id;
+        Cursor cursor = db.rawQuery(sql, null);
+        return cursor.isFirst();
+    }
+
+    public boolean isProductExist(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from " + PRODUCT_TABLE_NAME + "where id = " + id;
+        Cursor cursor = db.rawQuery(sql, null);
+        return cursor.isFirst();
     }
 }
