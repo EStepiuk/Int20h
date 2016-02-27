@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.fragments.*;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
@@ -75,6 +78,16 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+
+        (new Thread(){
+            @Override
+            public void run() {
+                KazpromDBHelper kazpromDBHelper = new KazpromDBHelper();
+                kazpromDBHelper.connect();
+                kazpromDBHelper.getCategoryList();
+            }
+        }).start();
     }
 
 
