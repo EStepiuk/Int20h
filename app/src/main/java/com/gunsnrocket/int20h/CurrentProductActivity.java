@@ -1,9 +1,14 @@
 package com.gunsnrocket.int20h;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 /**
  * Created by dnt on 2/28/16.
@@ -40,6 +45,12 @@ public class CurrentProductActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.current_product_name)).setText(productName);
         ((TextView) findViewById(R.id.current_product_description)).setText(productDescription);
+
+        final ImageView imageView = (ImageView) findViewById(R.id.current_product_image);
+        Picasso.with(this)
+                .load(R.drawable.no_image)
+                .resizeDimen(R.dimen.image_target_size, R.dimen.image_target_size)
+                .into(imageView);
     }
 
 }

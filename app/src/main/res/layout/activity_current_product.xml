@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center|top">
+    android:gravity="center|top"
+    android:padding="16dp">
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="#ff00"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_product_image"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:id="@+id/current_product_name"
-        android:padding="5dp"
+        android:paddingBottom="8dp"
         android:textSize="20sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:id="@+id/current_product_description"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"/>
+        android:id="@+id/current_product_description" />
 
 </LinearLayout>
+</ScrollView>

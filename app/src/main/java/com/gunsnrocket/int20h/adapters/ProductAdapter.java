@@ -44,7 +44,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.description.setText(list.get(position).getDesc());
         Picasso.with(context)
                 .load(R.drawable.no_image)
-                .resizeDimen(R.dimen.image_target_size, R.dimen.image_target_size)
+                .resizeDimen(R.dimen.product_image_target_size, R.dimen.product_image_target_size)
                 .into(holder.imageView);
     }
 
