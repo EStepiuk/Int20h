@@ -163,7 +163,7 @@ public class KazpromDBHelper {
             statement.setInt(1, group.getId());
             statement.setInt(2, group.getId());
             rs = statement.executeQuery();
-            while (rs.next()) {
+            if(rs.next()) {
                 Log.d("TTAG", rs.getString("name"));
                 String desc = rs.getString("html_long_description");
                 product = new Product(rs.getInt("id"), rs.getString("name"), group.getId(),

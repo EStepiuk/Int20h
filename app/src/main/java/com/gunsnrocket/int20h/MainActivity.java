@@ -1,5 +1,6 @@
 package com.gunsnrocket.int20h;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,31 +59,31 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         setContentView(R.layout.activity_main);
 
 
-
         final LocalDbHelper localDbHelper = new LocalDbHelper(this);
-        Category category = new Category(13,"nasos",0);
-        Group group = new Group(1422,"nasos2",0,13);
-        Product product = new Product(3442,"nasos3",1422,"NASOS ZAIBIS");
+//        Category category = new Category(13,"nasos",0);
+//        Group group = new Group(1422,"nasos2",0,13);
+//        Product product = new Product(3442,"nasos3",1422,"NASOS ZAIBIS");
 
 //        localDbHelper.addCategory(category);
 //        localDbHelper.addGroup(group);
 //        localDbHelper.addProduct(product);
 
-        (new Thread(){
+        (new Thread() {
             @Override
             public void run() {
 
 
-                Group group = new Group(1422,"ven-fan",0,13);
-                KazpromDBHelper kazpromDBHelper  = KazpromDBHelper.getInstance();
+                Group group = localDbHelper.getMaxGroup();
+                KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
                 kazpromDBHelper.connect();
 
-
-                kazpromDBHelper.getProductReclam(group,localDbHelper.getIdListProduct(1422));
+                if (group != null) {
+                    Log.d("TestRec", kazpromDBHelper.getProductReclam(group,
+                            localDbHelper.getIdListProduct(group.getId())).getName());
+                    Log.d("TestRec",""+group.getId());
+                }
             }
         }).start();
-
-
 
 
         // Set up the action bar.
@@ -118,6 +119,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        ArrayList<Product> list = localDbHelper.getListProduct();
+        for (Product p : list) {
+            Log.d("DBTest", p.getName());
+        }
+
     }
 
     @Override
