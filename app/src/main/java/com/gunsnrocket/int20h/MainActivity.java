@@ -61,27 +61,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         final LocalDbHelper localDbHelper = new LocalDbHelper(this);
 
-
-        (new Thread() {
-            @Override
-            public void run() {
-
-
-                Group group = localDbHelper.getMaxGroup();
-                KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
-                kazpromDBHelper.connect();
-
-                if (group != null && !localDbHelper.getIdListProduct(group.getId()).isEmpty()) {
-                    Log.d("TestRec"," "+group.getId());
-                    Log.d("TestRec"," "+localDbHelper.getIdListProduct(group.getId()).size());
-                    Log.d("TestRec", kazpromDBHelper.getProductReclam(group,
-                            localDbHelper.getIdListProduct(group.getId())).getName());
-                    Log.d("TestRec", "" + group.getId());
-                }
-            }
-        }).start();
-
-
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
