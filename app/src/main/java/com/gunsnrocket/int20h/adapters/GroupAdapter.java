@@ -14,6 +14,7 @@ import com.gunsnrocket.int20h.ProductsActivity;
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Group;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());
+        Picasso.with(context)
+                .load(R.drawable.no_image)
+                .resizeDimen(R.dimen.image_target_size, R.dimen.image_target_size)
+                .into(holder.imageView);
     }
 
     @Override
@@ -59,6 +64,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.group_name);
+            imageView = (ImageView) itemView.findViewById(R.id.group_image);
+
             itemView.setOnClickListener(this);
         }
 

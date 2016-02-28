@@ -7,30 +7,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="#ff00"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/product_image"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:padding="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="test"
                 android:id="@+id/product_name"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="8dp"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:lines="3"
+                android:maxLines="3"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/product_description"/>
+                android:id="@+id/product_description"
+                android:lines="5"
+                android:maxLines="5"/>
 
         </LinearLayout>
     </LinearLayout>
