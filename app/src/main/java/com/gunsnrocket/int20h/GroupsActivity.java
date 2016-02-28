@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.gunsnrocket.int20h.adapters.GroupAdapter;
 import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
@@ -27,6 +28,18 @@ public class GroupsActivity extends AppCompatActivity {
     private KazpromDBHelper kazpromDBHelper;
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -35,9 +48,10 @@ public class GroupsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_groups);
 
-        getSupportActionBar().setTitle(categoryName);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(categoryName);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         list = new ArrayList<Group>();
 
         kazpromDBHelper = KazpromDBHelper.getInstance();
@@ -49,21 +63,23 @@ public class GroupsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        (new AsyncTask<Void, Void, Void>() {
+        if (list.isEmpty()) {
+            (new AsyncTask<Void, Void, Void>() {
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                kazpromDBHelper.getGroupList(list, categoryId);
+                @Override
+                protected Void doInBackground(Void... params) {
+                    kazpromDBHelper.getGroupList(list, categoryId);
 
-                return null;
-            }
+                    return null;
+                }
 
-            @Override
-            protected void onPostExecute(Void result) {
-                adapter.notifyDataSetChanged();
-                Log.d("D", "privet");
-            }
-        }).execute();
+                @Override
+                protected void onPostExecute(Void result) {
+                    adapter.notifyDataSetChanged();
+                    Log.d("D", "privet");
+                }
+            }).execute();
+        }
 
 
     }

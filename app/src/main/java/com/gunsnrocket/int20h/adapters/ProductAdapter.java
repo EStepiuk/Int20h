@@ -3,6 +3,7 @@ package com.gunsnrocket.int20h.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());
+        Log.d("D", String.valueOf(list.get(position).getId()));
         holder.description.setText(list.get(position).getDesc());
     }
 
