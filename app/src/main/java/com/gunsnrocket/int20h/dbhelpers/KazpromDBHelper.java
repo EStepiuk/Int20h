@@ -139,7 +139,7 @@ public class KazpromDBHelper {
      * @return
      */
     public Product getProductReclam(Group group, ArrayList<Integer> ids) {
-
+        if(group == null || ids.isEmpty())return null;
         String sql = "Select * FROM (Select * FROM product WHERE category_id = ?" +
                 " ORDER BY rank DESC ) as test\n" +
                 "WHERE test.category_id = ? ";

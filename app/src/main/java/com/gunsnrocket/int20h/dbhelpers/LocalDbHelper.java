@@ -95,6 +95,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 "WHERE points = (Select max(points) FROM " + CATEGORY_TABLE_NAME + ")";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex("id"));
         } else
@@ -118,6 +119,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
             group = new Group(cursor.getInt(idIndex), cursor.getString(nameIndex),
                     cursor.getInt(pointsIndex), cursor.getInt(catIndex));
         }
+        db.close();
         return group;
     }
 
@@ -132,6 +134,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 resList.add(cursor.getInt(cursor.getColumnIndex("id")));
             } while (cursor.moveToNext());
         }
+        db.close();
         return resList;
     }
 
@@ -153,6 +156,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        db.close();
         return resList;
     }
 
@@ -185,12 +189,14 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("descr", product.getDesc());
         values.put("id_group", product.getId_Group());
         db.insert(PRODUCT_TABLE_NAME, null, values);
+        db.close();
     }
 
     public boolean isCategoryExist(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + CATEGORY_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         return cursor.moveToFirst();
     }
 
@@ -198,6 +204,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + GROUP_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         return cursor.moveToFirst();
     }
 
@@ -205,6 +212,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + PRODUCT_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         return cursor.moveToFirst();
     }
 
@@ -227,7 +235,6 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 "and points <> 0";
         db.rawQuery(sql, null);
         db.close();
-
 
     }
 
