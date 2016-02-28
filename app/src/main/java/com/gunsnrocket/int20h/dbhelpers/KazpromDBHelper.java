@@ -119,7 +119,7 @@ public class KazpromDBHelper {
     public void getProductList(ArrayList<Product> resultList, int idCategory, int idGroup) {
 
         String sql = "Select * FROM product\n" +
-                "WHERE category_id = ? or category_id = ?;";
+                "WHERE category_id = ? ;";
         ResultSet rs;
         PreparedStatement statement;
         try {
