@@ -43,21 +43,23 @@ public class CategoriesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(categoryAdapter);
 
-        (new AsyncTask<Void, Void, Void>() {
+        if (list.isEmpty()) {
+            (new AsyncTask<Void, Void, Void>() {
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                kazpromDBHelper.connect();
-                kazpromDBHelper.getCategoryList(list);
+                @Override
+                protected Void doInBackground(Void... params) {
+                    kazpromDBHelper.connect();
+                    kazpromDBHelper.getCategoryList(list);
 
-                return null;
-            }
+                    return null;
+                }
 
-            @Override
-            protected void onPostExecute(Void result) {
-                categoryAdapter.notifyDataSetChanged();
-            }
-        }).execute();
+                @Override
+                protected void onPostExecute(Void result) {
+                    categoryAdapter.notifyDataSetChanged();
+                }
+            }).execute();
+        }
 
         return rootView;
     }
