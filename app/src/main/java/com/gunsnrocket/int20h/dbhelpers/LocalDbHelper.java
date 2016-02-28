@@ -59,6 +59,32 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     }
 
 
+    public Category getCategory(int id){
+        String sql = "Select * FROM "+CATEGORY_TABLE_NAME+"\n" +
+                "WHERE id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
+        int pointsIndex = cursor.getColumnIndex("points");
+        return new Category(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex));
+    }
+
+    public Group getGroup(int id){
+        String sql = "Select * FROM "+GROUP_TABLE_NAME+"\n" +
+                "WHERE id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
+        int pointsIndex = cursor.getColumnIndex("points");
+        int catIndex = cursor.getColumnIndex("id_Cat");
+        return new Group(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex), cursor.getInt(catIndex));
+    }
     public int getMaxCategoryId(){
         String sql = "Select * FROM "+CATEGORY_TABLE_NAME+"\n" +
                 "WHERE points = (Select max(points) FROM "+CATEGORY_TABLE_NAME+")";
@@ -128,4 +154,26 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql, null);
         return cursor.isFirst();
     }
+
+    public void increasePoints(Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "update " + GROUP_TABLE_NAME + " set points = points + 77 where id = " + product.getId_Group();
+        db.rawQuery(sql, null);
+        Group group = getGroup(product.getId_Group());
+        sql = "update " + CATEGORY_TABLE_NAME + " set points = points + 77 where id = " + group.getId_Cat();
+        db.rawQuery(sql, null);
+        db.close();
+    }
+    public void decreasePoints(Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "update " + GROUP_TABLE_NAME + " set points = points - 77 where id = " + product.getId_Group() + "\n"+
+                "and points <> 0";
+        db.rawQuery(sql, null);
+        Group group = getGroup(product.getId_Group());
+        sql = "update " + CATEGORY_TABLE_NAME + " set points = points - 77 where id = " + group.getId_Cat() + "\n"+
+                "and points <> 0";
+        db.rawQuery(sql, null);
+        db.close();
+    }
+
 }
