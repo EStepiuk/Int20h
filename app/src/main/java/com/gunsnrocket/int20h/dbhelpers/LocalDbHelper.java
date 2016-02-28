@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class LocalDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "int20h";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 1;
     private static final String CREATE_SQL = "CREATE TABLE category (\n" +
             "  id INTEGER NOT NULL,\n" +
             "  name VARCHAR(45),\n" +
@@ -34,7 +34,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     private final String CREATE_SQL_PROD = "CREATE TABLE product (\n" +
             "  id INTEGER NOT NULL,\n" +
             "  name VARCHAR(45),\n" +
-            "  points INTEGER,\n" +
+            "  descr VARCHAR(255),\n" +
             "  id_group INTEGER,\n" +
             "  PRIMARY KEY (id));";
     private final String CATEGORY_TABLE_NAME = "category";
@@ -58,7 +58,32 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     }
 
 
+    public Category getCategory(int id){
+        String sql = "Select * FROM "+CATEGORY_TABLE_NAME+"\n" +
+                "WHERE id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
+        int pointsIndex = cursor.getColumnIndex("points");
+        return new Category(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex));
+    }
 
+    public Group getGroup(int id){
+        String sql = "Select * FROM "+GROUP_TABLE_NAME+"\n" +
+                "WHERE id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
+        int pointsIndex = cursor.getColumnIndex("points");
+        int catIndex = cursor.getColumnIndex("id_Cat");
+        return new Group(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex), cursor.getInt(catIndex));
+    }
     public int getMaxCategoryId(){
         String sql = "Select * FROM "+CATEGORY_TABLE_NAME+"\n" +
                 "WHERE points = (Select max(points) FROM "+CATEGORY_TABLE_NAME+")";
@@ -77,6 +102,25 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 resList.add(cursor.getInt(cursor.getColumnIndex("id")));
+            }while (cursor.moveToNext());
+        }
+        return resList;
+    }
+    public ArrayList<Product> getListProduct(){
+        ArrayList<Product> resList = new ArrayList<>();
+        String sql = "select id from " + PRODUCT_TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        if(cursor.moveToFirst()){
+            do{
+                int idIndex = cursor.getColumnIndex("id");
+                int nameIndex = cursor.getColumnIndex("name");
+                int descrIndex = cursor.getColumnIndex("descr");
+                int groupIndex = cursor.getColumnIndex("id_group");
+                Product product = new Product(cursor.getInt(idIndex), cursor.getString(nameIndex),
+                        cursor.getInt(groupIndex), cursor.getString(descrIndex));
+                resList.add(product);
+
             }while (cursor.moveToNext());
         }
         return resList;
@@ -106,7 +150,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("id", product.getId());
         values.put("name", product.getName());
-        values.put("points", 0);
+        values.put("descr", product.getDesc());
         values.put("id_group", product.getId_Group());
         db.insert(PRODUCT_TABLE_NAME, null, values);
     }
@@ -131,4 +175,29 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql, null);
         return cursor.isFirst();
     }
+
+    public void increasePoints(Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "update " + GROUP_TABLE_NAME + " set points = points + 77 where id = " + product.getId_Group();
+        db.rawQuery(sql, null);
+        Group group = getGroup(product.getId_Group());
+        sql = "update " + CATEGORY_TABLE_NAME + " set points = points + 77 where id = " + group.getId_Cat();
+        db.rawQuery(sql, null);
+        db.close();
+    }
+    public void decreasePoints(Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "update " + GROUP_TABLE_NAME + " set points = points - 77 where id = " + product.getId_Group() + "\n"+
+                "and points <> 0";
+        db.rawQuery(sql, null);
+        Group group = getGroup(product.getId_Group());
+        sql = "update " + CATEGORY_TABLE_NAME + " set points = points - 77 where id = " + group.getId_Cat() + "\n"+
+                "and points <> 0";
+        db.rawQuery(sql, null);
+        db.close();
+
+
+    }
+
+
 }
