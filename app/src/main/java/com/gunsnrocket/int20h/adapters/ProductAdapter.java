@@ -9,22 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gunsnrocket.int20h.CurrentProductActivity;
 import com.gunsnrocket.int20h.MainActivity;
-import com.gunsnrocket.int20h.ProductsActivity;
 import com.gunsnrocket.int20h.R;
-import com.gunsnrocket.int20h.models.Group;
+import com.gunsnrocket.int20h.models.Product;
 
 import java.util.List;
 
 /**
- * Created by dnt on 2/27/16.
+ * Created by dnt on 2/28/16.
  */
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private Context context;
-    private List<Group> list;
+    private List<Product> list;
 
-    public GroupAdapter(Context context, List<Group> list) {
+    public ProductAdapter(Context context, List<Product> list) {
         this.context = context;
         this.list = list;
     }
@@ -33,12 +33,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.item_group, parent, false));
+                .inflate(R.layout.item_product, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());
+        holder.description.setText(list.get(position).getDesc());
     }
 
     @Override
@@ -51,20 +52,23 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         ImageView imageView;
         TextView name;
+        TextView description;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            name = (TextView) itemView.findViewById(R.id.group_name);
+            name = (TextView) itemView.findViewById(R.id.product_name);
+            description = (TextView) itemView.findViewById(R.id.product_description);
+
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            Group group = list.get(getLayoutPosition());
-            context.startActivity(new Intent(context, ProductsActivity.class)
-                    .putExtra(MainActivity.GROUP_NAME, group.getName())
-                    .putExtra(MainActivity.GROUP_ID, group.getId()));
+            Product product = list.get(getLayoutPosition());
+            context.startActivity(new Intent(context, CurrentProductActivity.class)
+                    .putExtra(MainActivity.PRODUCT_NAME, product.getName())
+                    .putExtra(MainActivity.PRODUCT_DESCRIPTION, product.getDesc()));
         }
     }
 }

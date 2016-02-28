@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     public static final String CATEGORY_ID = "category_id";
     public static final String CATEGORY_NAME = "category_name";
+    public static final String GROUP_NAME = "group_name";
+    public static final String GROUP_ID = "group_id";
+    public static final String PRODUCT_NAME = "product_name";
+    public static final String PRODUCT_DESCRIPTION = "product_description";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

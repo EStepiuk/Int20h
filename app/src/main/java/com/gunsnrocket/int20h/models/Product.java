@@ -32,6 +32,10 @@ public class Product {
         this.name = name;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
     public int getId_Group() {
         return id_Group;
     }
