@@ -186,9 +186,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             switch (position) {
                 case 0:
                     return new CategoriesFragment();
+                case 1:
+                    return new HistoryFragment();
                 default:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return new CategoriesFragment();
             }
+
         }
 
         @Override
@@ -204,8 +207,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }

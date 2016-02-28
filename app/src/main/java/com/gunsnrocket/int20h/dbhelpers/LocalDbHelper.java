@@ -68,6 +68,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         int idIndex = cursor.getColumnIndex("id");
         int nameIndex = cursor.getColumnIndex("name");
         int pointsIndex = cursor.getColumnIndex("points");
+        db.close();
         return new Category(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex));
     }
 
@@ -82,6 +83,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         int nameIndex = cursor.getColumnIndex("name");
         int pointsIndex = cursor.getColumnIndex("points");
         int catIndex = cursor.getColumnIndex("id_Cat");
+        db.close();
         return new Group(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex), cursor.getInt(catIndex));
     }
     public int getMaxCategoryId(){
@@ -91,6 +93,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql, null);
         if(cursor != null)
             cursor.moveToFirst();
+        db.close();
         return cursor.getInt(cursor.getColumnIndex("id"));
     }
     public ArrayList<Integer> getIdListProduct(int id){
@@ -104,6 +107,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 resList.add(cursor.getInt(cursor.getColumnIndex("id")));
             }while (cursor.moveToNext());
         }
+        db.close();
         return resList;
     }
     public ArrayList<Product> getListProduct(){
@@ -123,6 +127,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
             }while (cursor.moveToNext());
         }
+        db.close();
         return resList;
     }
     public void addCategory(Category category){
@@ -153,12 +158,14 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("descr", product.getDesc());
         values.put("id_group", product.getId_Group());
         db.insert(PRODUCT_TABLE_NAME, null, values);
+        db.close();
     }
 
     public boolean isCategoryExist(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + CATEGORY_TABLE_NAME + "where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         return cursor.isFirst();
     }
 
@@ -173,6 +180,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + PRODUCT_TABLE_NAME + "where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
+        db.close();
         return cursor.isFirst();
     }
 
