@@ -17,6 +17,7 @@ import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Product;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private Context context;
-    private List<Product> list;
+    private List<Product> list = new ArrayList<>();
     private LocalDbHelper localDbHelper;
 
     public ProductAdapter(Context context, List<Product> list) {
@@ -75,7 +76,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         @Override
         public void onClick(View view) {
+
             Product product = list.get(getLayoutPosition());
+
             if(!localDbHelper.isProductExist(product.getId()))
                 localDbHelper.addProduct(product);
             localDbHelper.increasePoints(product);

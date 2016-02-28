@@ -87,15 +87,15 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         int nameIndex = cursor.getColumnIndex("name");
         int pointsIndex = cursor.getColumnIndex("points");
         int catIndex = cursor.getColumnIndex("id_Cat");
-        return new Group(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(pointsIndex), cursor.getInt(catIndex));
+        return new Group(cursor.getInt(idIndex), cursor.getString(nameIndex),
+                cursor.getInt(pointsIndex), cursor.getInt(catIndex));
     }
 
     public int getMaxCategoryId() {
-        String sql = "Select * FROM " + CATEGORY_TABLE_NAME + "\n" +
-                "WHERE points = (Select max(points) FROM " + CATEGORY_TABLE_NAME + ")";
+        String sql = "Select id FROM (Select * FROM " + CATEGORY_TABLE_NAME + " Order by points desc) " +
+                "as test;";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
-        db.close();
         if (cursor.moveToFirst()) {
             return cursor.getInt(cursor.getColumnIndex("id"));
         } else
@@ -103,9 +103,11 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     }
 
     public Group getMaxGroup() {
-        String sql = "Select * FROM " + GROUP_TABLE_NAME + "\n" +
-                "WHERE points = (Select max(points) FROM " + GROUP_TABLE_NAME + " Where id_Cat = "
-                + getMaxCategoryId() + ")";
+        int maxCategoryId = getMaxCategoryId();
+        Log.d("TIMER", "max category " + maxCategoryId);
+        String sql = "Select * FROM " +
+                "(Select * FROM " + GROUP_TABLE_NAME + " Where id_Cat = "
+                + maxCategoryId + " Order by points desc) as test";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
         Group group = null;
@@ -119,7 +121,6 @@ public class LocalDbHelper extends SQLiteOpenHelper {
             group = new Group(cursor.getInt(idIndex), cursor.getString(nameIndex),
                     cursor.getInt(pointsIndex), cursor.getInt(catIndex));
         }
-        db.close();
         return group;
     }
 
@@ -134,12 +135,11 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 resList.add(cursor.getInt(cursor.getColumnIndex("id")));
             } while (cursor.moveToNext());
         }
-        db.close();
         return resList;
     }
 
-    public ArrayList<Product> getListProduct() {
-        ArrayList<Product> resList = new ArrayList<>();
+    public void getListProduct(ArrayList<Product> resList) {
+        resList.clear();
         String sql = "select * from " + PRODUCT_TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
@@ -152,12 +152,12 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
                 Product product = new Product(cursor.getInt(idIndex), cursor.getString(nameIndex),
                         cursor.getInt(groupIndex), cursor.getString(descrIndex));
+
                 resList.add(product);
 
             } while (cursor.moveToNext());
         }
-        db.close();
-        return resList;
+
     }
 
     public void addCategory(Category category) {
@@ -167,7 +167,6 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("name", category.getName());
         values.put("points", 0);
         db.insert(CATEGORY_TABLE_NAME, null, values);
-        db.close();
     }
 
     public void addGroup(Group group) {
@@ -178,7 +177,6 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("points", 0);
         values.put("id_Cat", group.getId_Cat());
         db.insert(GROUP_TABLE_NAME, null, values);
-        db.close();
     }
 
     public void addProduct(Product product) {
@@ -189,14 +187,12 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         values.put("descr", product.getDesc());
         values.put("id_group", product.getId_Group());
         db.insert(PRODUCT_TABLE_NAME, null, values);
-        db.close();
     }
 
     public boolean isCategoryExist(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + CATEGORY_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
-        db.close();
         return cursor.moveToFirst();
     }
 
@@ -204,7 +200,6 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + GROUP_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
-        db.close();
         return cursor.moveToFirst();
     }
 
@@ -212,29 +207,32 @@ public class LocalDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + PRODUCT_TABLE_NAME + " where id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
-        db.close();
         return cursor.moveToFirst();
     }
 
     public void increasePoints(Product product) {
         Log.d("Point", "INCREASED");
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "update " + GROUP_TABLE_NAME + " set points = points + 77 where id = " + product.getId_Group();
-        db.rawQuery(sql, null);
+        String sql = "update " + GROUP_TABLE_NAME + " set points = points + 77 where id = ?";
+        db.execSQL(sql, new String[]{"" + product.getId_Group()});
         Group group = getGroup(product.getId_Group());
-        sql = "update " + CATEGORY_TABLE_NAME + " set points = points + 77 where id = " + group.getId_Cat();
-        db.rawQuery(sql, null);
+        sql = "update " + CATEGORY_TABLE_NAME + " set points = points + 77 where id = ?;";
+        db.execSQL(sql, new String[]{"" + group.getId_Cat()});
         Log.d("Point", "INCREASED2");
-        db.close();
     }
 
     public void decreasePoints(Product product) {
         SQLiteDatabase db = this.getWritableDatabase();
         Group group = getGroup(product.getId_Group());
-        String sql = "update " + CATEGORY_TABLE_NAME + " set points = points - 77 where id = " + group.getId_Cat() + "\n" +
+        String sql = "update " + CATEGORY_TABLE_NAME + " set points = points - 77 where id = ?" + "\n" +
                 "and points <> 0";
-        db.rawQuery(sql, null);
-        db.close();
+        db.execSQL(sql, new String[]{"" + group.getId_Cat()});
+
+        db = this.getWritableDatabase();
+        sql = "update " + GROUP_TABLE_NAME + " set points = points - 77 where id = ?" + "\n" +
+                "and points <> 0";
+        ;
+        db.execSQL(sql, new String[]{"" + product.getId_Group()});
 
     }
 
