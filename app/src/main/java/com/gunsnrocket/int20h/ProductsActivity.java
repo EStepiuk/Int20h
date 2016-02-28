@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.animation.OvershootInterpolator;
 
 import com.gunsnrocket.int20h.adapters.ProductAdapter;
 import com.gunsnrocket.int20h.dbhelpers.KazpromDBHelper;
 import com.gunsnrocket.int20h.models.Product;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
 
 /**
  * Created by dnt on 2/28/16.
@@ -23,7 +26,7 @@ public class ProductsActivity extends AppCompatActivity {
     private int categoryId, groupId;
     private ArrayList<Product> list;
     private RecyclerView recyclerView;
-    private ProductAdapter adapter;
+    private SlideInBottomAnimationAdapter adapter;
     private StaggeredGridLayoutManager layoutManager;
     private KazpromDBHelper kazpromDBHelper;
 
@@ -57,7 +60,9 @@ public class ProductsActivity extends AppCompatActivity {
 
         list = new ArrayList<Product>();
         recyclerView = (RecyclerView) findViewById(R.id.product_list);
-        adapter = new ProductAdapter(this, list);
+        adapter = new SlideInBottomAnimationAdapter(new ProductAdapter(this, list));
+        adapter.setDuration(500);
+        adapter.setInterpolator(new OvershootInterpolator(0.7f));
         layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
