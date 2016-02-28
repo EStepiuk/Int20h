@@ -103,7 +103,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
 
     public Group getMaxGroup() {
         String sql = "Select * FROM " + GROUP_TABLE_NAME + "\n" +
-                "WHERE points <= (Select max(points) FROM " + GROUP_TABLE_NAME + " Where id_Cat = "
+                "WHERE points = (Select max(points) FROM " + GROUP_TABLE_NAME + " Where id_Cat = "
                 + getMaxCategoryId() + ")";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
@@ -146,21 +146,9 @@ public class LocalDbHelper extends SQLiteOpenHelper {
                 int nameIndex = cursor.getColumnIndex("name");
                 int descrIndex = cursor.getColumnIndex("descr");
                 int groupIndex = cursor.getColumnIndex("id_group");
-                Log.d("ProductLog", "Before create Product");
-
-                Log.d("ProductLog", "idIndex" + idIndex);
-                Log.d("ProductLog", "nameI" + nameIndex);
-                Log.d("ProductLog", "descrI" + descrIndex);
-                Log.d("ProductLog", "grI" + groupIndex);
-
-                Log.d("ProductLog", "id" + cursor.getInt(idIndex));
-                Log.d("ProductLog", "name" + cursor.getString(nameIndex));
-                Log.d("ProductLog", "descr" + cursor.getInt(groupIndex));
-                Log.d("ProductLog", "gr" + cursor.getString(descrIndex));
 
                 Product product = new Product(cursor.getInt(idIndex), cursor.getString(nameIndex),
                         cursor.getInt(groupIndex), cursor.getString(descrIndex));
-                Log.d("ProductLog", "After create Product");
                 resList.add(product);
 
             } while (cursor.moveToNext());

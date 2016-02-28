@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
                 kazpromDBHelper.connect();
 
-                if (group != null) {
+                if (group != null && !localDbHelper.getIdListProduct(group.getId()).isEmpty()) {
+                    Log.d("TestRec"," "+group.getId());
+                    Log.d("TestRec"," "+localDbHelper.getIdListProduct(group.getId()).size());
                     Log.d("TestRec", kazpromDBHelper.getProductReclam(group,
                             localDbHelper.getIdListProduct(group.getId())).getName());
                     Log.d("TestRec", "" + group.getId());
@@ -114,10 +116,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-        ArrayList<Product> list = localDbHelper.getListProduct();
-        for (Product p : list) {
-            Log.d("DBTest", p.getName());
-        }
+
 
     }
 

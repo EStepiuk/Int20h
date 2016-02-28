@@ -140,9 +140,9 @@ public class KazpromDBHelper {
      */
     public Product getProductReclam(Group group, ArrayList<Integer> ids) {
 
-        String sql = "Select * FROM product\n" +
-                "WHERE category_id = ? and rank  = (Select max(rank) FROM product WHERE " +
-                "category_id = ?)";
+        String sql = "Select * FROM (Select * FROM product WHERE category_id = ?" +
+                " ORDER BY rank DESC ) as test\n" +
+                "WHERE test.category_id = ? ";
         ResultSet rs;
         Product product = null;
         PreparedStatement statement;
@@ -158,7 +158,7 @@ public class KazpromDBHelper {
             if (rs.next()) {
                 String desc = rs.getString("html_long_description");
                 product = new Product(rs.getInt("id"), rs.getString("name"), group.getId(),
-                        desc.substring(3, desc.length() - 3));
+                        desc);
             }
             rs.close();
             statement.close();
