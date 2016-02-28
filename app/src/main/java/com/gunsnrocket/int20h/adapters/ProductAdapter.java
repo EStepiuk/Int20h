@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.gunsnrocket.int20h.CurrentProductActivity;
 import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.R;
+import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Product;
 import com.squareup.picasso.Picasso;
 
@@ -25,10 +26,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private Context context;
     private List<Product> list;
+    private LocalDbHelper localDbHelper;
 
     public ProductAdapter(Context context, List<Product> list) {
         this.context = context;
         this.list = list;
+        localDbHelper = new LocalDbHelper(context);
     }
 
     @Override
@@ -72,6 +75,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         @Override
         public void onClick(View view) {
             Product product = list.get(getLayoutPosition());
+            if(!localDbHelper.isProductExist(product.getId()))
+                localDbHelper.addProduct(product);
+            localDbHelper.increasePoints(product);
             context.startActivity(new Intent(context, CurrentProductActivity.class)
                     .putExtra(MainActivity.PRODUCT_NAME, product.getName())
                     .putExtra(MainActivity.PRODUCT_DESCRIPTION, product.getDesc()));

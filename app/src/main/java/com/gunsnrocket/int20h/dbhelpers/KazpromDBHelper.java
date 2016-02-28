@@ -39,7 +39,7 @@ public class KazpromDBHelper {
 
     public void connect() {
         try {
-            if(connection == null) {
+            if (connection == null) {
                 Class.forName(DRIVER);
                 connection = DriverManager.getConnection(DB_URL, USER_NAME, USER_PASWORD);
             }
@@ -100,12 +100,6 @@ public class KazpromDBHelper {
             statement.setInt(1, idCategory);
             rs = statement.executeQuery();
             while (rs.next()) {
-                Log.d("TAG", rs.getString("caption"));
-                /**
-                 * MATEMATIKA
-                 *
-                 *
-                 */
                 Group category = new Group(rs.getInt("id"), rs.getString("caption"), 0, idCategory);
                 resultList.add(category);
             }
@@ -127,7 +121,6 @@ public class KazpromDBHelper {
             statement.setInt(1, idGroup);
             rs = statement.executeQuery();
             while (rs.next()) {
-                Log.d("TAG", rs.getString("name"));
                 String desc = rs.getString("html_long_description");
                 Product category = new Product(rs.getInt("id"), rs.getString("name"), idGroup,
                         (desc.isEmpty()) ? "" : desc);
@@ -141,16 +134,15 @@ public class KazpromDBHelper {
     }
 
     /**
-     *
      * @param group
      * @param ids
      * @return
      */
-    public Product getProductReclam(Group group,ArrayList<Integer> ids) {
+    public Product getProductReclam(Group group, ArrayList<Integer> ids) {
 
-        String sql = "Select * FROM product\n" +
-                "WHERE category_id = ? and rank  = (Select max(rank) FROM product WHERE " +
-                "category_id = ?)";
+        String sql = "Select * FROM (Select * FROM product WHERE category_id = ?" +
+                " ORDER BY rank DESC ) as test\n" +
+                "WHERE test.category_id = ? ";
         ResultSet rs;
         Product product = null;
         PreparedStatement statement;
@@ -163,11 +155,10 @@ public class KazpromDBHelper {
             statement.setInt(1, group.getId());
             statement.setInt(2, group.getId());
             rs = statement.executeQuery();
-            while (rs.next()) {
-                Log.d("TTAG", rs.getString("name"));
+            if (rs.next()) {
                 String desc = rs.getString("html_long_description");
                 product = new Product(rs.getInt("id"), rs.getString("name"), group.getId(),
-                        desc.substring(3,desc.length()-3));
+                        desc);
             }
             rs.close();
             statement.close();

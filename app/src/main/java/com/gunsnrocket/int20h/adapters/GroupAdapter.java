@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.ProductsActivity;
 import com.gunsnrocket.int20h.R;
+import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Group;
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +25,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     private Context context;
     private List<Group> list;
+    private LocalDbHelper localDbHelper;
 
     public GroupAdapter(Context context, List<Group> list) {
         this.context = context;
         this.list = list;
+        localDbHelper = new LocalDbHelper(context);
     }
 
     @Override
@@ -69,6 +72,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             Group group = list.get(getLayoutPosition());
+            if(!localDbHelper.isGroupExist(group.getId()))
+                localDbHelper.addGroup(group);
             context.startActivity(new Intent(context, ProductsActivity.class)
                     .putExtra(MainActivity.GROUP_NAME, group.getName())
                     .putExtra(MainActivity.GROUP_ID, group.getId()));

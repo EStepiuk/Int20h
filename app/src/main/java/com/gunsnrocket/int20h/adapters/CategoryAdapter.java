@@ -3,6 +3,7 @@ package com.gunsnrocket.int20h.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.gunsnrocket.int20h.GroupsActivity;
 import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.R;
+import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Category;
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +26,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private List<Category> list;
+    private LocalDbHelper localDbHelper;
 
     public CategoryAdapter(Context context, List<Category> list) {
         this.context = context;
         this.list = list;
+        localDbHelper = new LocalDbHelper(context);
     }
 
     @Override
@@ -68,9 +72,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         @Override
         public void onClick(View view) {
             Category category = list.get(getLayoutPosition());
+            if(!localDbHelper.isCategoryExist(category.getId()))
+                localDbHelper.addCategory(category);
             context.startActivity(new Intent(context, GroupsActivity.class)
                     .putExtra(MainActivity.CATEGORY_ID, category.getId())
                     .putExtra(MainActivity.CATEGORY_NAME, category.getName()));
+            Log.d("LogAdd","Test");
         }
     }
 
