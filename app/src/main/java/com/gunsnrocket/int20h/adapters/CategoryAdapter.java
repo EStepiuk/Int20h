@@ -15,6 +15,7 @@ import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Category;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -43,6 +44,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());
+        Picasso.with(context)
+                .load(R.drawable.no_image)
+                .resizeDimen(R.dimen.image_target_size, R.dimen.image_target_size)
+                .into(holder.imageView);
     }
 
     @Override
@@ -59,6 +64,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.category_name);
+            imageView = (ImageView) itemView.findViewById(R.id.category_image);
+
             itemView.setOnClickListener(this);
         }
 
