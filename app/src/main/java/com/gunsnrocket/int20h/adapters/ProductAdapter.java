@@ -72,6 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             itemView.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View view) {
             Product product = list.get(getLayoutPosition());
