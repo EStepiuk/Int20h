@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.adapters.CategoryAdapter;
@@ -16,6 +17,8 @@ import com.gunsnrocket.int20h.models.Category;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
+
 /**
  * Created by dnt on 2/27/16.
  */
@@ -23,7 +26,7 @@ public class CategoriesFragment extends Fragment {
 
     private ArrayList<Category> list;
     private RecyclerView recyclerView;
-    private CategoryAdapter categoryAdapter;
+    private SlideInBottomAnimationAdapter adapter;
     private StaggeredGridLayoutManager layoutManager;
     private KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
 
@@ -37,11 +40,14 @@ public class CategoriesFragment extends Fragment {
         list = new ArrayList<Category>();
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list_categories);
-        categoryAdapter = new CategoryAdapter(getContext(), list);
+        adapter = new SlideInBottomAnimationAdapter(new CategoryAdapter(getContext(), list));
+        adapter.setDuration(500);
+        adapter.setInterpolator(new OvershootInterpolator(0.7f));
+
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(categoryAdapter);
+        recyclerView.setAdapter(adapter);
 
         if (list.isEmpty()) {
             (new AsyncTask<Void, Void, Void>() {
@@ -56,7 +62,7 @@ public class CategoriesFragment extends Fragment {
 
                 @Override
                 protected void onPostExecute(Void result) {
-                    categoryAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
             }).execute();
         }
