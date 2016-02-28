@@ -58,6 +58,7 @@ public class LocalDbHelper extends SQLiteOpenHelper {
     }
 
 
+
     public int getMaxCategoryId(){
         String sql = "Select * FROM "+CATEGORY_TABLE_NAME+"\n" +
                 "WHERE points = (Select max(points) FROM "+CATEGORY_TABLE_NAME+")";

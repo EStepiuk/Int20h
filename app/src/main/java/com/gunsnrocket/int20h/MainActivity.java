@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 //        localDbHelper.addCategory(category);
 //        localDbHelper.addGroup(group);
-
         localDbHelper.addProduct(product);
 
         (new Thread(){
@@ -120,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     @Override
