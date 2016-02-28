@@ -3,7 +3,12 @@ package com.gunsnrocket.int20h;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -37,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_DESCRIPTION = "product_description";
 
+    public static final int DELAY = 1000 * 5;
+    Timer timer;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -60,6 +68,25 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 
         final LocalDbHelper localDbHelper = new LocalDbHelper(this);
+
+
+        (new Thread() {
+            @Override
+            public void run() {
+
+
+                Group group = localDbHelper.getMaxGroup();
+                KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
+                kazpromDBHelper.connect();
+
+                if (group != null) {
+                    Log.d("TestRec", kazpromDBHelper.getProductReclam(group,
+                            localDbHelper.getIdListProduct(group.getId())).getName());
+                    Log.d("TestRec", "" + group.getId());
+                }
+            }
+        }).start();
+
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -95,7 +122,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-
+        ArrayList<Product> list = localDbHelper.getListProduct();
+        for (Product p : list) {
+            Log.d("DBTest", p.getName());
+        }
+        AdvertTimerTask task = new AdvertTimerTask();
+        timer = new Timer();
+        timer.schedule(task, DELAY, DELAY);
 
     }
 
@@ -106,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     @Override
     public void onDestroy() {
-        //kazpromDBHelper.close();
+        KazpromDBHelper.getInstance().close();
 
         super.onDestroy();
     }
@@ -221,6 +254,47 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
+        }
+    }
+
+    class AdvertTimerTask extends TimerTask{
+        KazpromDBHelper kazpromDBHelper = KazpromDBHelper.getInstance();
+        LocalDbHelper localDbHelper = new LocalDbHelper(getBaseContext());
+        @Override
+        public void run() {
+            Group group = localDbHelper.getMaxGroup();
+            ArrayList<Integer> list = localDbHelper.getIdListProduct(group.getId());
+            final Product product = kazpromDBHelper.getProductReclam(group, list);
+            if(product != null)
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        localDbHelper.decreasePoints(product);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+
+                        // 2. Chain together various setter methods to set the dialog characteristics
+                        builder.setMessage(product.getName())
+                                .setTitle("My Title");
+                        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked OK button
+                                localDbHelper.increasePoints(product);
+                                MainActivity.this.startActivity(new Intent(MainActivity.this, CurrentProductActivity.class)
+                                        .putExtra(PRODUCT_NAME, product.getName())
+                                        .putExtra(PRODUCT_DESCRIPTION, product.getDesc()));
+                            }
+                        });
+                        builder.setNegativeButton("cansel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                                localDbHelper.decreasePoints(product);
+                            }
+                        });
+
+                        // 3. Get the AlertDialog from create()
+                        AlertDialog dialog = builder.create();
+                    }
+                });
         }
     }
 
