@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 //        localDbHelper.addCategory(category);
 //        localDbHelper.addGroup(group);
-        localDbHelper.addProduct(product);
+//        localDbHelper.addProduct(product);
 
         (new Thread(){
             @Override

@@ -68,7 +68,7 @@ public class ProductsActivity extends AppCompatActivity {
 
                 @Override
                 protected Void doInBackground(Void... params) {
-                    kazpromDBHelper.getProductList(list, categoryId, groupId);
+                    kazpromDBHelper.getProductList(list, groupId);
 
                     return null;
                 }

@@ -116,7 +116,7 @@ public class KazpromDBHelper {
         }
     }
 
-    public void getProductList(ArrayList<Product> resultList, int idCategory, int idGroup) {
+    public void getProductList(ArrayList<Product> resultList, int idGroup) {
 
         String sql = "Select * FROM product\n" +
                 "WHERE category_id = ? ;";
@@ -124,8 +124,7 @@ public class KazpromDBHelper {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, idCategory);
-            statement.setInt(2, idGroup);
+            statement.setInt(1, idGroup);
             rs = statement.executeQuery();
             while (rs.next()) {
                 Log.d("TAG", rs.getString("name"));
