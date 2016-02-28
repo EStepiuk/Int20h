@@ -60,13 +60,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
 
         final LocalDbHelper localDbHelper = new LocalDbHelper(this);
-//        Category category = new Category(13,"nasos",0);
-//        Group group = new Group(1422,"nasos2",0,13);
-//        Product product = new Product(3442,"nasos3",1422,"NASOS ZAIBIS");
 
-//        localDbHelper.addCategory(category);
-//        localDbHelper.addGroup(group);
-//        localDbHelper.addProduct(product);
 
         (new Thread() {
             @Override
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 if (group != null) {
                     Log.d("TestRec", kazpromDBHelper.getProductReclam(group,
                             localDbHelper.getIdListProduct(group.getId())).getName());
-                    Log.d("TestRec",""+group.getId());
+                    Log.d("TestRec", "" + group.getId());
                 }
             }
         }).start();
