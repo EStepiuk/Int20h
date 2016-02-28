@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.adapters.ProductAdapter;
@@ -18,6 +19,8 @@ import com.gunsnrocket.int20h.models.Product;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
+
 /**
  * Created by dnt on 2/28/16.
  */
@@ -25,7 +28,7 @@ public class HistoryFragment extends Fragment {
 
     private ArrayList<Product> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private ProductAdapter adapter;
+    private SlideInBottomAnimationAdapter adapter;
     private StaggeredGridLayoutManager layoutManager;
     private LocalDbHelper localDbHelper;
     public HistoryFragment() {
@@ -38,7 +41,9 @@ public class HistoryFragment extends Fragment {
         localDbHelper = new LocalDbHelper(getContext());
         localDbHelper.getListProduct(list);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list_history);
-        adapter = new ProductAdapter(getContext(), list);
+        adapter = new SlideInBottomAnimationAdapter(new ProductAdapter(getContext(), list));
+        adapter.setDuration(500);
+        adapter.setInterpolator(new OvershootInterpolator(0.7f));
         layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
