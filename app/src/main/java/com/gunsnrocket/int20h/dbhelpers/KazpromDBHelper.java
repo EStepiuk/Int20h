@@ -126,12 +126,12 @@ public class KazpromDBHelper {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, idCategory);
             statement.setInt(2, idGroup);
-            rs = statement.executeQuery();
+            rs = statement.executeQuery(sql);
             while (rs.next()) {
-                Log.d("TAG", rs.getString("name"));
+                Log.d("TAG", rs.getString("caption"));
                 String desc = rs.getString("html_long_description");
-                Product category = new Product(rs.getInt("id"), rs.getString("name"), idGroup,
-                        (desc.isEmpty()) ? "" : desc);
+                Product category = new Product(rs.getInt("id"), rs.getString("caption"), idGroup,
+                        desc.substring(3,desc.length()-3));
                 resultList.add(category);
             }
             rs.close();
