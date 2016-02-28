@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.gunsnrocket.int20h.GroupsActivity;
 import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.R;
+import com.gunsnrocket.int20h.dbhelpers.LocalDbHelper;
 import com.gunsnrocket.int20h.models.Category;
 
 import java.util.List;
@@ -23,10 +24,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private List<Category> list;
+    private LocalDbHelper localDbHelper;
 
     public CategoryAdapter(Context context, List<Category> list) {
         this.context = context;
         this.list = list;
+        localDbHelper = new LocalDbHelper(context);
     }
 
     @Override
@@ -61,6 +64,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         @Override
         public void onClick(View view) {
             Category category = list.get(getLayoutPosition());
+            if(!localDbHelper.isCategoryExist(category.getId()))
+                localDbHelper.addCategory(category);
             context.startActivity(new Intent(context, GroupsActivity.class)
                     .putExtra(MainActivity.CATEGORY_ID, category.getId())
                     .putExtra(MainActivity.CATEGORY_NAME, category.getName()));
