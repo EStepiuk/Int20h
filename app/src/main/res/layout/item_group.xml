@@ -10,20 +10,21 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="#ff00"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_image"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="test"
-                android:id="@+id/group_name"/>
+                android:id="@+id/group_name"
+                android:lines="2"
+                android:maxLines="2"/>
 
         </LinearLayout>
     </LinearLayout>

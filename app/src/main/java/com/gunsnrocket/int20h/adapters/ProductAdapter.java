@@ -14,6 +14,7 @@ import com.gunsnrocket.int20h.CurrentProductActivity;
 import com.gunsnrocket.int20h.MainActivity;
 import com.gunsnrocket.int20h.R;
 import com.gunsnrocket.int20h.models.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,15 +41,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());
-        Log.d("D", String.valueOf(list.get(position).getId()));
         holder.description.setText(list.get(position).getDesc());
+        Picasso.with(context)
+                .load(R.drawable.no_image)
+                .resizeDimen(R.dimen.image_target_size, R.dimen.image_target_size)
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
         return list.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -61,6 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
             name = (TextView) itemView.findViewById(R.id.product_name);
             description = (TextView) itemView.findViewById(R.id.product_description);
+            imageView = (ImageView) itemView.findViewById(R.id.product_image);
 
             itemView.setOnClickListener(this);
         }
